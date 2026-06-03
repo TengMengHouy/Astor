@@ -1,28 +1,24 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
+import {FileText, LayoutDashboard, Settings, Store} from "lucide-react"
+
 export const items = [
     {
-        title: "Home",
-        url: "#",
-        icon: Home,
+        title: "Dashboard",
+        url: "/dashboard",
+        icon: LayoutDashboard,
     },
     {
-        title: "Inbox",
-        url: "#",
-        icon: Inbox,
-    },
-    {
-        title: "Calendar",
-        url: "#",
-        icon: Calendar,
-    },
-    {
-        title: "Search",
-        url: "#",
-        icon: Search,
+        title: "Blog Table",
+        url: "/BlogTable",
+        icon: FileText,
     },
     {
         title: "Settings",
-        url: "#",
+        url: "/settings",
         icon: Settings,
+    },
+    {
+        title: "Store Front",
+        url: "/",
+        icon: Store,
     },
 ]

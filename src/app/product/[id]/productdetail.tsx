@@ -6,9 +6,12 @@ import {useParams} from "next/navigation";
 import React, {useEffect, useMemo, useState} from "react";
 import type {Product} from "@/app/types/productTypes";
 import api from "@/lib/axios";
-import {getMockProduct} from "@/lib/mock-products";
 import {mockProducts} from "@/app/data/productData";
 import {ArrowLeft, BadgeCheck, CreditCard, Heart, PackageCheck, ShoppingBag, Star, Truck} from "lucide-react";
+
+function getMockProduct(id: string) {
+    return mockProducts.find((product) => product.uuid === id || String(product.id) === id) ?? null;
+}
 
 export default function ProductDetail() {
     const {id} = useParams();

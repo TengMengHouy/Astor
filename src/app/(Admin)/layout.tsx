@@ -9,13 +9,17 @@ export default function RootLayout({children,}: Readonly<{ children: React.React
 }>) {
     return (
         <SidebarProvider>
-        <ErrorBoundary errorComponent={Error}>
-            <AppSidebar/>
+            <ErrorBoundary errorComponent={Error}>
+                <AppSidebar/>
                 <Suspense fallback={Loading()}>
-                    <SidebarTrigger />
-                    {children}
+                    <div className="min-h-screen flex-1 bg-slate-50 dark:bg-zinc-950">
+                        <div className="sticky top-0 z-20 border-b border-slate-200 bg-white/80 px-4 py-3 backdrop-blur-xl dark:border-white/10 dark:bg-zinc-950/80">
+                            <SidebarTrigger/>
+                        </div>
+                        {children}
+                    </div>
                 </Suspense>
-        </ErrorBoundary>
+            </ErrorBoundary>
         </SidebarProvider>
     );
 }

@@ -139,3 +139,48 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes adminRise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes adminScan {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 160px 160px;
+  }
+}
+
+@keyframes adminHeroGlow {
+  0%, 100% {
+    box-shadow: 0 24px 70px rgb(15 23 42 / 0.18);
+  }
+  50% {
+    box-shadow: 0 34px 90px rgb(16 185 129 / 0.18);
+  }
+}
+
+.admin-dashboard-hero {
+  animation: adminHeroGlow 7s ease-in-out infinite;
+}
+
+.admin-scanline {
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: adminScan 12s linear infinite;
+}
+
+.admin-stat-card {
+  animation: adminRise 520ms ease both;
+}

@@ -7,12 +7,14 @@ import {useState} from "react";
 import {LogIn, LogOut, Menu, ShoppingBag, UserRound, X} from "lucide-react";
 import {navItems} from "@/app/data/rountPage";
 import {ModeToggle} from "@/components/modeToggle";
+import {getAuthGateLoginUrl} from "@/lib/authgate";
 
 export default function NavbarComponent() {
     const pathname = usePathname();
     const [open, setOpen] = useState(false);
+    const loginUrl = getAuthGateLoginUrl();
 
-    if (pathname === '/dashboard' || pathname === '/BlogTable') {
+    if (pathname === '/dashboard' || pathname === '/BlogTable' || pathname === '/settings') {
         return null;
     }
 
@@ -68,7 +70,7 @@ export default function NavbarComponent() {
                                 Account
                             </Link>
                             <Link
-                                href="/login"
+                                href={loginUrl}
                                 className="inline-flex h-10 items-center gap-2 rounded-lg px-3 text-sm font-bold text-slate-600 transition hover:bg-slate-100 hover:text-slate-950 dark:text-zinc-300 dark:hover:bg-white/10 dark:hover:text-white"
                             >
                                 <LogIn className="h-4 w-4" aria-hidden="true"/>
@@ -119,7 +121,7 @@ export default function NavbarComponent() {
                                 <ModeToggle/>
                                 <div className="flex gap-2">
                                     <Link
-                                        href="/login"
+                                        href={loginUrl}
                                         onClick={() => setOpen(false)}
                                         className="inline-flex h-10 items-center gap-2 rounded-lg border border-slate-200 px-3 text-sm font-bold dark:border-white/10"
                                     >

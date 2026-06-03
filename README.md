@@ -36,3 +36,18 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 # Astor
 # Astor
+
+## Backend URL
+
+Copy `.env.example` to `.env.local`, then update the backend URL:
+
+```env
+NEXT_PUBLIC_AUTHGATE_API_BASE_URL=http://localhost:8080/api/v2/
+AUTHGATE_API_BASE_URL=http://localhost:8080/api/v2/
+NEXT_PUBLIC_AUTHGATE_ORIGIN=https://astor-shop.authgate.site
+NEXT_PUBLIC_AUTHGATE_LOGIN_URL=https://astor-shop.authgate.site/bff/login?return_to=%2F
+NEXT_PUBLIC_AUTHGATE_LOGOUT_URL=https://astor-shop.authgate.site/bff/logout
+```
+
+Use `NEXT_PUBLIC_AUTHGATE_API_BASE_URL` for browser API calls and `AUTHGATE_API_BASE_URL` for server-side product metadata.
+Use the AuthGate login/logout URLs when the app should use AuthGate BFF OAuth browser sessions.
