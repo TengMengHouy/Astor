@@ -75,8 +75,9 @@ export default function Home() {
                                 <Link
                                     href={`/product/${product.uuid}`}
                                     key={product.id}
-                                    className="group overflow-hidden rounded-lg border border-white/15 bg-white/10 backdrop-blur transition hover:-translate-y-1 hover:bg-white/15"
+                                    className="group relative isolate min-h-[190px] overflow-hidden rounded-lg border border-white/15 bg-white/10 shadow-lg shadow-black/10 backdrop-blur transition hover:-translate-y-1 hover:border-emerald-200/60 hover:bg-white/15"
                                 >
+                                    <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-300 via-amber-200 to-sky-300"/>
                                     <div className="relative aspect-square overflow-hidden bg-slate-900">
                                         <Image
                                             fill
@@ -84,14 +85,21 @@ export default function Home() {
                                             src={product.image}
                                             alt={product.tittle}
                                             sizes="(max-width: 640px) 50vw, 180px"
-                                            className="object-cover transition duration-500 group-hover:scale-105"
+                                            className="object-cover transition duration-700 group-hover:scale-110"
                                         />
-                                    </div>
-                                    <div className="space-y-1 p-3">
-                                        <p className="line-clamp-1 text-sm font-bold">{product.tittle}</p>
-                                        <div className="flex items-center gap-1 text-xs text-amber-200">
+                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-transparent"/>
+                                        <span className="absolute right-2 top-2 flex items-center gap-1 rounded-full bg-amber-300 px-2 py-1 text-xs font-bold text-slate-950">
                                             <Star className="h-3.5 w-3.5 fill-current" aria-hidden="true"/>
-                                            <span>{product.rating}</span>
+                                            {product.rating}
+                                        </span>
+                                    </div>
+                                    <div className="space-y-3 p-3">
+                                        <p className="line-clamp-1 text-sm font-bold">{product.tittle}</p>
+                                        <div className="flex items-center justify-between gap-2">
+                                            <span className="text-sm font-bold">${product.price.toFixed(2)}</span>
+                                            <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-white text-slate-950 transition group-hover:bg-emerald-300">
+                                                <ArrowRight className="h-3.5 w-3.5" aria-hidden="true"/>
+                                            </span>
                                         </div>
                                     </div>
                                 </Link>

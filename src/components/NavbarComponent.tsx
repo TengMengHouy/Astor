@@ -7,12 +7,18 @@ import {useState} from "react";
 import {LogIn, LogOut, Menu, ShoppingBag, UserRound, X} from "lucide-react";
 import {navItems} from "@/app/data/rountPage";
 import {ModeToggle} from "@/components/modeToggle";
-import {getAuthGateLoginUrl} from "@/lib/authgate";
+import {getAuthGateLoginUrl, getAuthGateUserEmail, getAuthGateUserInitials, getAuthGateUserName} from "@/lib/authgate";
+import {useAuthGateUser} from "@/lib/use-authgate-user";
 
 export default function NavbarComponent() {
     const pathname = usePathname();
     const [open, setOpen] = useState(false);
     const loginUrl = getAuthGateLoginUrl();
+    const {loading, user} = useAuthGateUser();
+    const isSignedIn = Boolean(user);
+    const accountName = loading ? "Account" : getAuthGateUserName(user);
+    const accountEmail = getAuthGateUserEmail(user);
+    const accountInitials = getAuthGateUserInitials(user);
 
     if (pathname === '/dashboard' || pathname === '/BlogTable' || pathname === '/settings') {
         return null;
@@ -62,27 +68,31 @@ export default function NavbarComponent() {
                             <ModeToggle/>
                             <Link
                                 href="/user"
+                                title={accountEmail || accountName}
                                 className="inline-flex h-10 items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm font-bold transition hover:-translate-y-0.5 hover:border-emerald-300 hover:bg-emerald-50 dark:border-white/10 dark:bg-white/10 dark:hover:border-emerald-300/40 dark:hover:bg-emerald-400/10"
                             >
                                 <span className="grid h-7 w-7 place-items-center rounded-full bg-emerald-400 text-slate-950">
-                                    <UserRound className="h-4 w-4" aria-hidden="true"/>
+                                    {isSignedIn ? accountInitials : <UserRound className="h-4 w-4" aria-hidden="true"/>}
                                 </span>
-                                Account
+                                <span className="max-w-32 truncate">{accountName}</span>
                             </Link>
-                            <Link
-                                href={loginUrl}
-                                className="inline-flex h-10 items-center gap-2 rounded-lg px-3 text-sm font-bold text-slate-600 transition hover:bg-slate-100 hover:text-slate-950 dark:text-zinc-300 dark:hover:bg-white/10 dark:hover:text-white"
-                            >
-                                <LogIn className="h-4 w-4" aria-hidden="true"/>
-                                Login
-                            </Link>
-                            <Link
-                                href="/logout"
-                                className="inline-flex h-10 items-center gap-2 rounded-lg bg-slate-950 px-3 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-zinc-200"
-                            >
-                                <LogOut className="h-4 w-4" aria-hidden="true"/>
-                                Logout
-                            </Link>
+                            {isSignedIn ? (
+                                <Link
+                                    href="/logout"
+                                    className="inline-flex h-10 items-center gap-2 rounded-lg bg-slate-950 px-3 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-zinc-200"
+                                >
+                                    <LogOut className="h-4 w-4" aria-hidden="true"/>
+                                    Logout
+                                </Link>
+                            ) : (
+                                <Link
+                                    href={loginUrl}
+                                    className="inline-flex h-10 items-center gap-2 rounded-lg bg-slate-950 px-3 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-zinc-200"
+                                >
+                                    <LogIn className="h-4 w-4" aria-hidden="true"/>
+                                    Login
+                                </Link>
+                            )}
                         </div>
 
                         <button
@@ -120,22 +130,25 @@ export default function NavbarComponent() {
                             <div className="mt-4 flex items-center justify-between gap-2">
                                 <ModeToggle/>
                                 <div className="flex gap-2">
-                                    <Link
-                                        href={loginUrl}
-                                        onClick={() => setOpen(false)}
-                                        className="inline-flex h-10 items-center gap-2 rounded-lg border border-slate-200 px-3 text-sm font-bold dark:border-white/10"
-                                    >
-                                        <LogIn className="h-4 w-4" aria-hidden="true"/>
-                                        Login
-                                    </Link>
-                                    <Link
-                                        href="/logout"
-                                        onClick={() => setOpen(false)}
-                                        className="inline-flex h-10 items-center gap-2 rounded-lg bg-slate-950 px-3 text-sm font-bold text-white dark:bg-white dark:text-slate-950"
-                                    >
-                                        <LogOut className="h-4 w-4" aria-hidden="true"/>
-                                        Logout
-                                    </Link>
+                                    {isSignedIn ? (
+                                        <Link
+                                            href="/logout"
+                                            onClick={() => setOpen(false)}
+                                            className="inline-flex h-10 items-center gap-2 rounded-lg bg-slate-950 px-3 text-sm font-bold text-white dark:bg-white dark:text-slate-950"
+                                        >
+                                            <LogOut className="h-4 w-4" aria-hidden="true"/>
+                                            Logout
+                                        </Link>
+                                    ) : (
+                                        <Link
+                                            href={loginUrl}
+                                            onClick={() => setOpen(false)}
+                                            className="inline-flex h-10 items-center gap-2 rounded-lg bg-slate-950 px-3 text-sm font-bold text-white dark:bg-white dark:text-slate-950"
+                                        >
+                                            <LogIn className="h-4 w-4" aria-hidden="true"/>
+                                            Login
+                                        </Link>
+                                    )}
                                 </div>
                             </div>
                         </div>

@@ -1,9 +1,13 @@
+'use client';
+
 import Image from "next/image";
 import Link from "next/link";
-import {BadgeCheck, Clock3, CreditCard, Heart, MapPin, PackageCheck, Settings, ShoppingBag, Star, Truck, UserRound} from "lucide-react";
+import {BadgeCheck, Clock3, CreditCard, Heart, LogIn, MapPin, PackageCheck, Settings, ShoppingBag, Star, Truck, UserRound} from "lucide-react";
 import {mockProducts} from "@/app/data/productData";
+import {getAuthGateLoginUrl, getAuthGateUserEmail, getAuthGateUserName} from "@/lib/authgate";
+import {useAuthGateUser} from "@/lib/use-authgate-user";
 
-const user = {
+const fallbackUser = {
     name: "Astro Member",
     email: "member@astro.shop",
     tier: "Gear Insider",
@@ -26,6 +30,16 @@ const recentOrders = [
 const savedProducts = mockProducts.slice(0, 4);
 
 export default function UserPage() {
+    const {loading, user} = useAuthGateUser();
+    const loginUrl = getAuthGateLoginUrl();
+    const signedIn = Boolean(user);
+    const profile = {
+        ...fallbackUser,
+        name: loading ? "Checking account..." : signedIn ? getAuthGateUserName(user) : "Guest shopper",
+        email: signedIn ? getAuthGateUserEmail(user) || "Signed in with AuthGate" : "Sign in to load your AuthGate profile",
+        tier: signedIn ? "AuthGate session" : "Guest mode",
+    };
+
     return (
         <main className="min-h-screen bg-slate-50 text-slate-950 dark:bg-zinc-950 dark:text-white">
             <section className="mx-auto max-w-7xl px-4 pb-16 pt-28 sm:px-6 lg:px-8">
@@ -40,21 +54,21 @@ export default function UserPage() {
                                     </div>
                                     <span className="mb-2 inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold uppercase text-emerald-800 dark:bg-emerald-400/15 dark:text-emerald-200">
                                         <BadgeCheck className="h-4 w-4" aria-hidden="true"/>
-                                        {user.tier}
+                                        {profile.tier}
                                     </span>
                                 </div>
 
                                 <div className="mt-5 space-y-3">
                                     <div>
-                                        <h1 className="text-3xl font-bold">{user.name}</h1>
-                                        <p className="mt-1 text-sm text-slate-500 dark:text-zinc-400">{user.email}</p>
+                                        <h1 className="text-3xl font-bold">{profile.name}</h1>
+                                        <p className="mt-1 text-sm text-slate-500 dark:text-zinc-400">{profile.email}</p>
                                     </div>
                                     <div className="flex flex-wrap gap-2 text-sm font-bold text-slate-500 dark:text-zinc-400">
                                         <span className="inline-flex items-center gap-1.5">
                                             <MapPin className="h-4 w-4" aria-hidden="true"/>
-                                            {user.location}
+                                            {profile.location}
                                         </span>
-                                        <span>{user.joined}</span>
+                                        <span>{profile.joined}</span>
                                     </div>
                                 </div>
 
@@ -79,10 +93,17 @@ export default function UserPage() {
                                     Shop products
                                     <ShoppingBag className="h-4 w-4" aria-hidden="true"/>
                                 </Link>
-                                <Link href="/login" className="flex h-11 items-center justify-between rounded-lg bg-slate-50 px-3 text-sm font-bold transition hover:bg-sky-50 hover:text-sky-700 dark:bg-white/10 dark:hover:bg-sky-400/10 dark:hover:text-sky-200">
-                                    Sign in
-                                    <UserRound className="h-4 w-4" aria-hidden="true"/>
-                                </Link>
+                                {signedIn ? (
+                                    <Link href="/logout" className="flex h-11 items-center justify-between rounded-lg bg-slate-50 px-3 text-sm font-bold transition hover:bg-rose-50 hover:text-rose-700 dark:bg-white/10 dark:hover:bg-rose-400/10 dark:hover:text-rose-200">
+                                        Logout
+                                        <UserRound className="h-4 w-4" aria-hidden="true"/>
+                                    </Link>
+                                ) : (
+                                    <Link href={loginUrl} className="flex h-11 items-center justify-between rounded-lg bg-slate-50 px-3 text-sm font-bold transition hover:bg-sky-50 hover:text-sky-700 dark:bg-white/10 dark:hover:bg-sky-400/10 dark:hover:text-sky-200">
+                                        Sign in with AuthGate
+                                        <LogIn className="h-4 w-4" aria-hidden="true"/>
+                                    </Link>
+                                )}
                             </div>
                         </section>
                     </aside>

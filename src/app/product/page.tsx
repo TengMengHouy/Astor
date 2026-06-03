@@ -229,8 +229,9 @@ function ProductContent() {
                             <Link
                                 href={`/product/${product.uuid}`}
                                 key={product.id}
-                                className="group flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:border-amber-200 hover:shadow-md dark:border-white/10 dark:bg-zinc-900 dark:hover:border-amber-400/30"
+                                className="group relative isolate flex items-center gap-3 overflow-hidden rounded-lg border border-slate-200 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:border-amber-200 hover:shadow-lg dark:border-white/10 dark:bg-zinc-900 dark:hover:border-amber-400/30"
                             >
+                                <div className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-amber-300 via-emerald-300 to-sky-300"/>
                                 <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-md bg-slate-100 dark:bg-zinc-800">
                                     <Image
                                         fill
@@ -241,12 +242,17 @@ function ProductContent() {
                                         className="object-cover transition duration-500 group-hover:scale-105"
                                     />
                                 </div>
-                                <div className="min-w-0">
+                                <div className="min-w-0 flex-1">
                                     <p className="truncate font-bold">{product.tittle}</p>
-                                    <p className="mt-1 flex items-center gap-1 text-sm text-amber-600 dark:text-amber-300">
-                                        <Star className="h-4 w-4 fill-current" aria-hidden="true"/>
-                                        {product.rating}
-                                    </p>
+                                    <div className="mt-2 flex items-center gap-2">
+                                        <span className="flex items-center gap-1 text-sm font-bold text-amber-600 dark:text-amber-300">
+                                            <Star className="h-4 w-4 fill-current" aria-hidden="true"/>
+                                            {product.rating}
+                                        </span>
+                                        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-bold text-slate-600 dark:bg-white/10 dark:text-zinc-300">
+                                            ${product.price.toFixed(2)}
+                                        </span>
+                                    </div>
                                 </div>
                             </Link>
                         ))}
@@ -270,22 +276,21 @@ function ProductContent() {
                 </div>
 
                 {loading ? (
-                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    <div className="columns-1 gap-5 sm:columns-2 lg:columns-3 xl:columns-4">
                         {Array.from({length: 8}).map((_, index) => (
-                            <div key={index} className="min-h-[430px] animate-pulse rounded-lg bg-white shadow-sm dark:bg-zinc-900">
-                                <div className="aspect-[4/3] rounded-t-lg bg-slate-200 dark:bg-zinc-800"/>
-                                <div className="space-y-4 p-4">
-                                    <div className="h-5 w-3/4 rounded bg-slate-200 dark:bg-zinc-800"/>
-                                    <div className="h-4 w-full rounded bg-slate-200 dark:bg-zinc-800"/>
-                                    <div className="h-4 w-2/3 rounded bg-slate-200 dark:bg-zinc-800"/>
-                                </div>
+                            <div
+                                key={index}
+                                className="mb-5 break-inside-avoid animate-pulse rounded-lg bg-slate-200 shadow-sm dark:bg-zinc-900"
+                                style={{aspectRatio: index % 3 === 0 ? "4 / 5" : index % 3 === 1 ? "3 / 4" : "1 / 1.22"}}
+                            >
+                                <div className="h-full w-full rounded-lg bg-slate-200 dark:bg-zinc-800"/>
                             </div>
                         ))}
                     </div>
                 ) : filtered.length > 0 ? (
-                    <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+                    <div className="columns-1 gap-5 sm:columns-2 lg:columns-3 xl:columns-4">
                         {filtered.map((item) => (
-                            <Link href={`/product/${item.uuid}`} key={item.id} className="h-full">
+                            <Link href={`/product/${item.uuid}`} key={item.id} className="mb-5 block break-inside-avoid focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-300/40">
                                 <Card
                                     id={item.id}
                                     uuid={item.uuid}
