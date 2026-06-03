@@ -1,37 +1,64 @@
 import {Metadata} from "next";
 import ProductDetail from "@/app/product/[id]/productdetail";
-import {Product} from "@/app/types/productTypes";
+import type {Product} from "@/app/types/productTypes";
+import {getBackendUrl} from "@/lib/backend";
+import {getMockProduct} from "@/lib/mock-products";
 
-export async function generateMetadata(
-    // ✅ Let Next.js infer the correct type
-    props: any
-): Promise<Metadata> {
-    const { params } = props
+export async function generateMetadata(props: any): Promise<Metadata> {
+    const {id} = await props.params;
+    const fallbackProduct = getMockProduct(id);
 
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}product/${params.id}`)
+        const res = await fetch(getBackendUrl(["product", id]));
         if (!res.ok) {
-            return { title: 'User not found' }
+            if (fallbackProduct) {
+                return {
+                    title: fallbackProduct.tittle,
+                    description: fallbackProduct.description,
+                    openGraph: {
+                        title: fallbackProduct.tittle,
+                        description: fallbackProduct.description,
+                        images: [{url: fallbackProduct.image, width: 600, height: 400}],
+                        type: "website",
+                    },
+                };
+            }
+
+            return {title: 'Product not found'};
         }
 
-        const user:Product = await res.json()
-        console.table(user)
+        const product: Product = await res.json();
         return {
-            title: `${user.tittle}`,
+            title: product.tittle,
+            description: product.description,
             openGraph: {
-                title: `${user.tittle}`,
-                images: [{url: user.image,width:200,height:200}],
-                type:"website",
+                title: product.tittle,
+                description: product.description,
+                images: [{url: product.image, width: 600, height: 400}],
+                type: "website",
             },
-        }
+        };
     } catch {
-        return {
-            title: 'User not found',
+        if (fallbackProduct) {
+            return {
+                title: fallbackProduct.tittle,
+                description: fallbackProduct.description,
+                openGraph: {
+                    title: fallbackProduct.tittle,
+                    description: fallbackProduct.description,
+                    images: [{url: fallbackProduct.image, width: 600, height: 400}],
+                    type: "website",
+                },
+            };
         }
+
+        return {
+            title: 'Product not found',
+        };
     }
 }
 
-export default function page (){
+export default function Page() {
     return (
         <ProductDetail/>
     )

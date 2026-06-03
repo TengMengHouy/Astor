@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import axios from 'axios';
-import Cookies from 'js-cookie';
+import React, {useState} from 'react';
+import {useRouter} from 'next/navigation';
+import api from '@/lib/axios';
 
-export default function page() {
+export default function SignUpPage() {
     const [userName, setUserName] = useState('');
     const [userRoles, setUserRoles] = useState('');
     const [email, setEmail] = useState('');
@@ -18,18 +17,14 @@ export default function page() {
         setError('');
 
         try {
-            const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}users/create`, {
+            await api.post('users/create', {
                 userName,
                 email,
                 password,
-                userRoles
+                userRoles,
             });
-            const token = res.data.token;
 
-            if (token) {
-                Cookies.set('token', token, { expires: 7 }); // ⏳ Expires in 7 days
-                router.push('/product'); // ✅ Protected route
-            }
+            router.push('/product');
         } catch (err: any) {
             setError(err.response?.data?.message || 'SignUp failed');
         }
@@ -69,7 +64,7 @@ export default function page() {
                 <input
                     type="checkbox"
                     placeholder="admin"
-                    value={"admin"}
+                    value="admin"
                     onChange={e => setUserRoles(e.target.value)}
                     className="w-full border px-4 py-2 mb-4"
                     required

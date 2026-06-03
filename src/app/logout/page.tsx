@@ -1,17 +1,16 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import Cookies from 'js-cookie';
+import {useRouter} from 'next/navigation';
+import {useEffect} from 'react';
 import Loading from "@/components/Loading";
+import api from "@/lib/axios";
 
 export default function LogoutPage() {
     const router = useRouter();
 
     useEffect(() => {
-        Cookies.remove('token');
-
-        router.push('/');
+        api.post('logout')
+            .finally(() => router.push('/'));
     }, [router]);
 
     return <>

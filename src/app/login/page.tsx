@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import axios from 'axios';
-import Cookies from 'js-cookie';
+import React, {useState} from 'react';
+import {useRouter} from 'next/navigation';
+import api from '@/lib/axios';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -16,17 +15,12 @@ export default function LoginPage() {
         setError('');
 
         try {
-            const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}users/login`, {
+            await api.post('users/login', {
                 email,
                 password,
             });
 
-            const token = res.data.token;
-
-            if (token) {
-                Cookies.set('token', token, { expires: 7 }); // ⏳ Expires in 7 days
-                router.push('/product'); // ✅ Protected route
-            }
+            router.push('/product');
         } catch (err: any) {
             setError(err.response?.data?.message || 'Login failed');
         }

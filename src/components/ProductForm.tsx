@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import axios from 'axios';
 import api from "@/lib/axios";
 
 export default function ProductForm() {
@@ -33,8 +32,8 @@ export default function ProductForm() {
                 rating: parseFloat(formData.rating),
             };
 
-            const res = await api.post('http://localhost:1234/api/v2/product/create', payload);
-            alert('Product created: ' + res.data?.tittle || 'Success');
+            const res = await api.post('product/create', payload);
+            alert(`Product created: ${res.data?.tittle ?? 'Success'}`);
             setFormData({ tittle: '', image: '', description: '', price: '', rating: '' });
         } catch (error: any) {
             console.error(error);
