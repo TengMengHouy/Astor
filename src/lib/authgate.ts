@@ -25,7 +25,7 @@ function getAuthGateUrl(envUrl: string | undefined, fallbackPath: string) {
 }
 
 export function getAuthGateLoginUrl() {
-    return getAuthGateUrl(process.env.NEXT_PUBLIC_AUTHGATE_LOGIN_URL, "/bff/login?return_to=%2F");
+    return getAuthGateUrl(process.env.NEXT_PUBLIC_AUTHGATE_LOGIN_URL, "");
 }
 
 export function getAuthGateLogoutUrl() {
