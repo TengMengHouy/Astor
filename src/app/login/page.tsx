@@ -9,7 +9,7 @@ import {mockProducts} from "@/app/data/productData";
 const previewProducts = mockProducts.slice(0, 3);
 
 export default function LoginPage() {
-    const loginUrl = getAuthGateLoginUrl();
+    const loginUrl ="/oauth2/authorization/admin";
 
     return (
         <main className="min-h-screen bg-[#f8fafc] text-slate-950 dark:bg-[#09090b] dark:text-white">
