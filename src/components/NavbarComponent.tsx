@@ -13,7 +13,7 @@ import {useAuthGateUser} from "@/lib/use-authgate-user";
 export default function NavbarComponent() {
     const pathname = usePathname();
     const [open, setOpen] = useState(false);
-    const loginUrl ="/login";
+    const loginUrl ="/oauth2/authorization/admin";
     const {loading, user} = useAuthGateUser();
     const isSignedIn = Boolean(user);
     const accountName = loading ? "Account" : getAuthGateUserName(user);
